@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "314276848048",
+    "project_id": "socialme-app",
+    "storage_bucket": "socialme-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:314276848048:android:c1ebbc3977fc7e6994b675",
+        "android_client_info": {
+          "package_name": "com.example.socializeme_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-nTKBPaADdIJF8KNBwWvnO-OkRtLZ8fE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
