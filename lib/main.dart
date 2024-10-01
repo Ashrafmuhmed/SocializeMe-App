@@ -21,6 +21,7 @@ void main() async {
       ),
     ],
     child: MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData.dark(),
       home: Auth(),
     ),

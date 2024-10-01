@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socializeme_app/screens/CurrentUserProfileScreen.dart';
+import 'package:socializeme_app/screens/MainScreen.dart';
 import 'constants/constants.dart';
 import 'package:socializeme_app/screens/loginScreen.dart';
 
@@ -24,7 +25,7 @@ class _AuthState extends State<Auth> {
     if (logged) {
       Navigator.of(context).pop();
       Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => Profilescreen()));
+          MaterialPageRoute(builder: (context) => Mainscreen()));
     }
   }
 

@@ -1,16 +1,12 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socializeme_app/models/userData.dart';
-import 'package:socializeme_app/screens/DeleteAccountPage.dart';
 import 'package:socializeme_app/screens/loginScreen.dart';
-import 'package:socializeme_app/services/userServices/UserServices.dart';
 import '../constants/constants.dart';
-import '../widgets/ProfileWidgets/CustomProfileButtonIcons.dart';
+import '../widgets/ProfileWidgets/UserProfilePageHead.dart';
 
 class Profilescreen extends StatefulWidget {
   const Profilescreen({super.key});
@@ -57,68 +53,7 @@ class _ProfilescreenState extends State<Profilescreen> {
                 currentUser = Userdata.json(
                     userData: snapshot.data!.data() as Map<String, dynamic>);
                 return ListView(
-                  children: [
-                    Card(
-                        elevation: 5,
-                        child: Column(
-                          children: [
-                            ListTile(
-                              leading: Container(
-                                width: 100,
-                                height: 100,
-                                decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                        image: AssetImage(
-                                            'assets/pics/WhatsApp Image 2024-09-25 at 17.05.31_61c35a2e.jpg'),
-                                        fit: BoxFit.fitHeight)),
-                              ),
-                              subtitle: Text(
-                                currentUser!.bio,
-                                style: const TextStyle(
-                                    color: Color.fromARGB(255, 139, 139, 139)),
-                              ),
-                              title: Text(
-                                currentUser!.username,
-                                style: const TextStyle(
-                                    color: Colors.amber,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 8.0, horizontal: 55),
-                              child: Divider(
-                                height: 10,
-                                thickness: 2,
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(bottom: 10),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  CustomProfileButtonIcons(
-                                    icondata: Icons.delete_forever_outlined,
-                                    onPressed: () {
-                                      showPasswordDialog();
-                                    },
-                                  ),
-                                  CustomProfileButtonIcons(
-                                    icondata: Icons.edit,
-                                    onPressed: () {},
-                                  ),
-                                  CustomProfileButtonIcons(
-                                    icondata: Icons.add_circle_outline,
-                                    onPressed: () {},
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ))
-                  ],
+                  children: [UserProfilePageHead(currentUser: currentUser!)],
                 );
               } else {
                 isLoading = true;
@@ -148,7 +83,7 @@ class _ProfilescreenState extends State<Profilescreen> {
 
         // Re-authenticate
         await user.reauthenticateWithCredential(credential);
-
+        await firestore.collection(profiles).doc(user.uid).delete();
         // Delete the user
         await user.delete();
 

@@ -4,11 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:socializeme_app/Cubits/LoginUserCubit/login_user_cubit.dart';
 import 'package:socializeme_app/models/authModel.dart';
-import 'package:socializeme_app/screens/CurrentUserProfileScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socializeme_app/widgets/SnackBarWidget.dart';
 
 import '../widgets/CustomTextField.dart';
+import 'MainScreen.dart';
 import 'signupScreen.dart';
 
 class Loginscreen extends StatefulWidget {
@@ -23,7 +23,7 @@ class _LoginscreenState extends State<Loginscreen> {
   final TextEditingController _passCont = TextEditingController();
   GlobalKey<FormState> formkey = GlobalKey();
   AutovalidateMode autovalid = AutovalidateMode.disabled;
-  bool _isLoading = false, _isLoggedIn = false;
+  bool _isLoading = false;
   @override
   Widget build(BuildContext context) {
     return BlocListener<LoginUserCubit, LoginUserState>(
@@ -45,8 +45,8 @@ class _LoginscreenState extends State<Loginscreen> {
           _isLoading = false;
           Authmodel.isLoggedIn = true;
           Navigator.pop(context);
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => Profilescreen()));
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const Mainscreen()));
         }
       },
       child: ModalProgressHUD(
@@ -62,9 +62,9 @@ class _LoginscreenState extends State<Loginscreen> {
                     autovalidateMode: autovalid,
                     key: formkey,
                     child: ListView(
-                      physics: BouncingScrollPhysics(),
+                      physics: const BouncingScrollPhysics(),
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           height: 55,
                         ),
                         Image.asset('assets/pics/Asset 1.png'),
@@ -108,16 +108,16 @@ class _LoginscreenState extends State<Loginscreen> {
                                 autovalid = AutovalidateMode.always;
                               }
                             },
-                            child: Text('Login')),
+                            child: const Text('Login')),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('Don\'t have an account ? '),
+                            const Text('Don\'t have an account ? '),
                             GestureDetector(
                               onTap: () {
                                 navigateSignup(context);
                               },
-                              child: Text(
+                              child: const Text(
                                 'SignUp',
                                 style: TextStyle(color: Colors.blue),
                               ),
@@ -127,10 +127,10 @@ class _LoginscreenState extends State<Loginscreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('forgot your password ? '),
+                            const Text('forgot your password ? '),
                             GestureDetector(
                               onTap: () {
-                                if (_emailCont == null) {
+                                if (_emailCont == '') {
                                   Snackbarwidget().ShowSnackbar(
                                       context: context,
                                       message:
@@ -143,7 +143,7 @@ class _LoginscreenState extends State<Loginscreen> {
                                       message: 'See your mail now !!');
                                 }
                               },
-                              child: Text(
+                              child: const Text(
                                 'Reset my password',
                                 style: TextStyle(color: Colors.blue),
                               ),
@@ -163,6 +163,6 @@ class _LoginscreenState extends State<Loginscreen> {
   void navigateSignup(BuildContext context) {
     Navigator.of(context).pop();
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => Signupscreen()));
+        .push(MaterialPageRoute(builder: (context) => const Signupscreen()));
   }
 }

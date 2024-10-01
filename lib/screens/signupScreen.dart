@@ -1,6 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socializeme_app/Cubits/RegesterUserCubit/regester_user_cubit.dart';
 import 'package:socializeme_app/screens/CurrentUserProfileScreen.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -36,7 +36,7 @@ class _SignupscreenState extends State<Signupscreen> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<RegesterUserCubit, RegesterUserState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is RegesterUserLoading) {
           setState(() {
             _isLoading = true;
@@ -58,6 +58,8 @@ class _SignupscreenState extends State<Signupscreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('User Registered Successfully!')),
           );
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setBool('isLoggedIn', true);
           Navigator.pop(context);
           Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => const Profilescreen()));

@@ -5,7 +5,10 @@ class Snackbarwidget {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Row(
       children: [
-        Icon(Icons.error),
+        Icon(
+          Icons.error,
+          color: Colors.amber,
+        ),
         SizedBox(
           width: 20,
         ),

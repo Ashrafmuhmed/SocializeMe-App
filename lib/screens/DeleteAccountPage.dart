@@ -1,5 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:socializeme_app/screens/signupScreen.dart';
+import 'package:socializeme_app/widgets/SnackBarWidget.dart';
+
+import '../constants/constants.dart';
 
 class DeleteAccountPage extends StatefulWidget {
   @override
@@ -7,47 +14,48 @@ class DeleteAccountPage extends StatefulWidget {
 }
 
 class _DeleteAccountPageState extends State<DeleteAccountPage> {
+  bool isLoading = false;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // Function to delete the user account
   Future<void> deleteUser(String password) async {
     User? user = _auth.currentUser;
 
     if (user != null) {
       try {
-        // Re-authenticate the user with their password
         AuthCredential credential = EmailAuthProvider.credential(
           email: user.email!,
           password: password,
         );
-
-        // Re-authenticate
         await user.reauthenticateWithCredential(credential);
-
-        // Delete the user
+        await FirebaseFirestore.instance
+            .collection(profiles)
+            .doc(user.uid)
+            .delete();
         await user.delete();
-
-        // Show success message or navigate away
+        setState(() async {
+          isLoading = false;
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setBool('isLoggedIn', false);
+          Navigator.pop(context);
+          Navigator.pop(context);
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => Signupscreen()));
+        });
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("User account deleted successfully")),
+          const SnackBar(content: Text("User account deleted successfully")),
         );
       } on FirebaseAuthException catch (e) {
-        if (e.code == 'wrong-password') {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Wrong password. Please try again.")),
-          );
-        } else if (e.code == 'requires-recent-login') {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Re-authentication required. Please login again.")),
-          );
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Error: ${e.message}")),
-          );
-        }
+        setState(() {
+          isLoading = false;
+        });
+        Snackbarwidget()
+            .ShowSnackbar(context: context, message: 'Invalid password');
       } catch (e) {
+        setState(() {
+          isLoading = false;
+        });
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Unknown error occurred.")),
+          const SnackBar(content: Text("Unknown error occurred.")),
         );
       }
     }
@@ -61,11 +69,11 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Enter Password'),
+          title: const Text('Enter Password'),
           content: TextField(
             controller: _passwordController,
             obscureText: true,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Password',
               border: OutlineInputBorder(),
             ),
@@ -73,23 +81,25 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             ElevatedButton(
               onPressed: () {
                 String password = _passwordController.text.trim();
                 if (password.isNotEmpty) {
-                  Navigator.of(context).pop(); // Close the dialog
-                  deleteUser(password); // Call the delete function
+                  Navigator.pop(context);
+                  setState(() {
+                    isLoading = true;
+                    deleteUser(password);
+                  });
                 } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("Password cannot be empty")),
-                  );
+                  Snackbarwidget().ShowSnackbar(
+                      context: context, message: 'Passwordfield cant be empty');
                 }
               },
-              child: Text('Delete Account'),
+              child: const Text('Delete Account'),
             ),
           ],
         );
@@ -99,16 +109,53 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Delete Account'),
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            showPasswordDialog(); // Show the password input dialog
-          },
-          child: Text('Delete Account'),
+    return ModalProgressHUD(
+      blur: 10,
+      inAsyncCall: isLoading,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Delete Account'),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'After deleting your account all your data will be deleted permenantly',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.amber,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 33.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        showPasswordDialog();
+                      },
+                      child: const Text(
+                        'Delete my account',
+                        style: TextStyle(
+                            color: Colors.red, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text(
+                        'Dont delete my account',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
