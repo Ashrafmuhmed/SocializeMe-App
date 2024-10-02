@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../models/userData.dart';
 import 'CustomProfileButtonIcons.dart';
@@ -6,13 +7,26 @@ import 'CustomProfileButtonIcons.dart';
 class Otheruserprofilepagehead extends StatelessWidget {
   const Otheruserprofilepagehead({super.key, required this.currentUser});
   final Userdata currentUser;
+  void _sendEmail() async {
+    final Uri emailUri = Uri(
+      scheme: 'mailto',
+      path: currentUser.email,
+      query: 'subject=Contact&body=ZUUU', // Add subject and body if needed
+    );
+
+    if (await launchUrl(emailUri, mode: LaunchMode.externalApplication)) {
+      await launchUrl(emailUri);
+    } else {
+      throw 'Could not launch $emailUri';
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         Positioned(
           child: Card(
-              margin: EdgeInsets.only(top: 55),
+              margin: const EdgeInsets.only(top: 55),
               elevation: 5,
               child: Padding(
                 padding: const EdgeInsets.only(top: 55),
@@ -40,7 +54,7 @@ class Otheruserprofilepagehead extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 10),
+                      padding: const EdgeInsets.only(bottom: 10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -50,7 +64,7 @@ class Otheruserprofilepagehead extends StatelessWidget {
                           ),
                           CustomProfileButtonIcons(
                             icondata: Icons.email_outlined,
-                            onPressed: () {},
+                            onPressed: _sendEmail,
                           ),
                         ],
                       ),

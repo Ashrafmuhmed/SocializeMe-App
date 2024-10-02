@@ -41,6 +41,7 @@ dependencies:
   flutter_bloc: ^8.1.6
   modal_progress_hud_nsn: ^0.5.1
   shared_preferences: ^2.3.2
+  url_launcher: ^6.1.10
 
 dev_dependencies:
   flutter_test:
