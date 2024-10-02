@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:socializeme_app/models/userData.dart';
+import 'package:socializeme_app/widgets/ProfileWidgets/OtherUserProfilePageHead.dart';
 
-import '../widgets/ProfileWidgets/UserProfilePageHead.dart';
 
 class Userprofilepage extends StatefulWidget {
-  Userprofilepage({super.key, required this.userData});
-    var userData;
-  late final Userdata user = Userdata.json(userData: userData);
+  Userprofilepage({super.key, required this.user});
+   final Userdata user;
   @override
   State<Userprofilepage> createState() => _UserprofilepageState();
 }
@@ -16,7 +15,7 @@ class _UserprofilepageState extends State<Userprofilepage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
-        children: [UserProfilePageHead(currentUser: widget.user)],
+        children: [Otheruserprofilepagehead(currentUser: widget.user)],
       ),
     );
   }
