@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:image_picker/image_picker.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -34,6 +37,16 @@ class Userservices {
       } catch (e) {
         print("Unknown error: $e");
       }
+    }
+  }
+
+  pickImage(ImageSource imgSrc) async {
+    final ImagePicker _imagePicker = ImagePicker();
+    XFile? _file = await _imagePicker.pickImage(source: imgSrc);
+    if (_file != null) {
+      return await _file.readAsBytes();
+    } else {
+      log('No message seletcted');
     }
   }
 }

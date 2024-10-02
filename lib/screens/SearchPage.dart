@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:socializeme_app/constants/constants.dart';
@@ -42,6 +43,7 @@ class _SearchPageState extends State<SearchPage> {
     if (_serach.text != '') {
       String name;
       for (var snapshot in allResults) {
+        if (snapshot['uid'] == FirebaseAuth.instance.currentUser!.uid) continue;
         name = snapshot['username'].toString().toLowerCase();
         if (name.contains(_serach.text.toLowerCase())) {
           showResults.add(snapshot);
@@ -88,7 +90,10 @@ class _SearchPageState extends State<SearchPage> {
       body: ListView.builder(
           itemCount: resultsList.length,
           itemBuilder: (context, index) {
-            return UserTile(userdata: (resultsList.elementAt(index) as QueryDocumentSnapshot).data() as Map<String, dynamic>);
+            return UserTile(
+                userdata:
+                    (resultsList.elementAt(index) as QueryDocumentSnapshot)
+                        .data() as Map<String, dynamic>);
           }),
     );
   }

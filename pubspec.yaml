@@ -42,6 +42,8 @@ dependencies:
   modal_progress_hud_nsn: ^0.5.1
   shared_preferences: ^2.3.2
   url_launcher: ^6.1.10
+  image_picker: ^1.1.2
+  firebase_storage: ^12.3.2
 
 dev_dependencies:
   flutter_test:
@@ -69,6 +71,8 @@ flutter:
   assets:
     - assets/pics/Asset 1.png
     - assets/pics/WhatsApp Image 2024-09-25 at 17.05.31_61c35a2e.jpg
+    - assets/pics/user.png
+    - assets/pics/profile.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

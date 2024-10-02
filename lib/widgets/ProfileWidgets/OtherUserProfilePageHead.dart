@@ -79,11 +79,10 @@ class Otheruserprofilepagehead extends StatelessWidget {
           child: Container(
             width: 100,
             height: 100,
-            decoration: const BoxDecoration(
+            decoration:  BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
-                    image: AssetImage(
-                        'assets/pics/WhatsApp Image 2024-09-25 at 17.05.31_61c35a2e.jpg'),
+                    image: NetworkImage(currentUser.imgLink),
                     fit: BoxFit.fitHeight)),
           ),
         ),

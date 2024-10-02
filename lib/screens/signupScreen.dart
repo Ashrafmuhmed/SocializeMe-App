@@ -1,9 +1,15 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socializeme_app/Cubits/RegesterUserCubit/regester_user_cubit.dart';
 import 'package:socializeme_app/screens/CurrentUserProfileScreen.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:socializeme_app/screens/MainScreen.dart';
+import 'package:socializeme_app/services/userServices/UserServices.dart';
 import '../models/authModel.dart';
 import '../widgets/CustomTextField.dart';
 import 'loginScreen.dart';
@@ -21,6 +27,7 @@ class _SignupscreenState extends State<Signupscreen> {
   final TextEditingController _bioCont = TextEditingController();
   final TextEditingController _nameCont = TextEditingController();
   bool _isLoading = false;
+  Uint8List? _image;
   GlobalKey<FormState> formkey = GlobalKey();
   AutovalidateMode autovalid = AutovalidateMode.disabled;
 
@@ -50,7 +57,7 @@ class _SignupscreenState extends State<Signupscreen> {
             SnackBar(content: Text(state.exception.message!)),
           );
         } else if (state is RegesterUserSuccess) {
-                    Authmodel.isLoggedIn = true;
+          Authmodel.isLoggedIn = true;
 
           setState(() {
             _isLoading = false;
@@ -58,11 +65,11 @@ class _SignupscreenState extends State<Signupscreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('User Registered Successfully!')),
           );
-              SharedPreferences prefs = await SharedPreferences.getInstance();
+          SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setBool('isLoggedIn', true);
           Navigator.pop(context);
           Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const Profilescreen()));
+              MaterialPageRoute(builder: (context) => const Mainscreen()));
         }
       },
       child: Scaffold(
@@ -79,6 +86,27 @@ class _SignupscreenState extends State<Signupscreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Flexible(flex: 2, child: Container()),
+                  Stack(
+                    children: [
+                      Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                            border: const Border(top: BorderSide()),
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                image: _image == null ? AssetImage('assets/pics/profile.png') : MemoryImage(_image!), 
+                                fit: BoxFit.fitHeight)),
+                      ),
+                      Positioned(
+                        top: 60,
+                        left: 60,
+                        child: IconButton(
+                            onPressed: _selectImage,
+                            icon: Icon(Icons.add_a_photo)),
+                      )
+                    ],
+                  ),
                   CustomTextField(
                     label: 'Name',
                     inputType: TextInputType.name,
@@ -143,7 +171,8 @@ class _SignupscreenState extends State<Signupscreen> {
                     height: 20,
                   ),
                   ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async{
+                        final Uint8List avatarImage = await imageToUnit8List('assets/pics/profile.png');
                         if (formkey.currentState!.validate()) {
                           formkey.currentState!.save();
                           BlocProvider.of<RegesterUserCubit>(context)
@@ -151,7 +180,8 @@ class _SignupscreenState extends State<Signupscreen> {
                                   username: _nameCont.text,
                                   bio: _bioCont.text,
                                   email: _emailCont.text,
-                                  password: _passCont.text);
+                                  password: _passCont.text,
+                                  imgSrc: _image == null ? avatarImage : _image!);
                         } else {
                           autovalid = AutovalidateMode.always;
                           setState(() {});
@@ -182,6 +212,13 @@ class _SignupscreenState extends State<Signupscreen> {
       ),
     );
   }
+
+  Future<void> _selectImage() async {
+    Uint8List? img = await Userservices().pickImage(ImageSource.gallery);
+    setState(() {
+      _image = img;
+    });
+  }
 }
 
 void navigateLogin(BuildContext context) {
@@ -189,25 +226,8 @@ void navigateLogin(BuildContext context) {
   Navigator.of(context)
       .push(MaterialPageRoute(builder: (context) => const Loginscreen()));
 }
+Future<Uint8List> imageToUnit8List(String path) async {
+  ByteData byteData = await rootBundle.load(path);
+  return byteData.buffer.asUint8List();
+}
 
-  // void regesterUser() async {
-  //   await Authmethod().regesterUser(
-  //       email: _emailCont.text,
-  //       password: _passCont.text,
-  //       name: _nameCont.text,
-  //       bio: _bioCont.text);
-  // }
-
-  // void regesterUser() async {
-  //   String resp = await Authmethod().registerUser(
-  //       email: _emailCont.text,
-  //       password: _passCont.text,
-  //       username: _nameCont.text,
-  //       bio: _bioCont.text);
-  //   if (resp == 'success') {
-  //     Navigator.pop(context);
-  //     Navigator.of(context)
-  //         .push(MaterialPageRoute(builder: (context) => Loginscreen()));
-  //   }
-  // }
-// }
