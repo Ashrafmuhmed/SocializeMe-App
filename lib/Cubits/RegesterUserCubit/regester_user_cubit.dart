@@ -29,7 +29,8 @@ class RegesterUserCubit extends Cubit<RegesterUserState> {
           await uploadImageToStorage(childName: email, file: imgSrc);
       var cred = await register(email, password);
       Userdata user = Userdata(
-          bio: bio, email: email, username: username, uid: cred!.user!.uid, imgLink: imgLink);
+        
+          bio: bio, email: email, username: username, uid: cred!.user!.uid, imgLink: imgLink, postsIds: []);
       await _firestore
           .collection('profiles')
           .doc(cred.user!.uid.toString())

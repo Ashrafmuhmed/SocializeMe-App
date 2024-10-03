@@ -26,29 +26,37 @@ class AddPostCubit extends Cubit<AddPostState> {
       {required String title,
       required String description,
       required Uint8List? file}) async {
+    emit(AddPostLoading());
     Postmodel post = Postmodel(
         title: title,
         description: description,
         time: DateTime.now().toString().substring(0, 16),
         userUid: FirebaseAuth.instance.currentUser!.uid);
-    DocumentReference docRef =
-        await _firestore.collection('UserPosts').add(post.toJSON());
-    String postid = docRef.id;
 
-    String? imgLink;
-    if (file != null) {
-      imgLink = await uploadImageToStorage(childName: postid, file: file);
+    try {
+      DocumentReference docRef =
+          await _firestore.collection('UserPosts').add(post.toJSON());
+      String postid = docRef.id;
+
+      String? imgLink;
+      if (file != null) {
+        imgLink = await uploadImageToStorage(childName: postid, file: file);
+        _firestore
+            .collection('UserPosts')
+            .doc(postid)
+            .update({'imgLink': imgLink});
+      }
+
       _firestore
-          .collection('UserPosts')
-          .doc(postid)
-          .update({'imgLink': imgLink});
-    }
+          .collection('profiles')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .update({
+        'postsIds': FieldValue.arrayUnion([postid])
+      });
 
-    _firestore
-        .collection('profiles')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .update({
-      'postsIds': FieldValue.arrayUnion([postid])
-    });
+      emit(AddPostSuccess());
+    } catch (e) {
+      emit(AddPostFailed(exception: e as Exception));
+    }
   }
 }

@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socializeme_app/Cubits/RegesterUserCubit/regester_user_cubit.dart';
-import 'package:socializeme_app/screens/CurrentUserProfileScreen.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:socializeme_app/screens/MainScreen.dart';
 import 'package:socializeme_app/services/userServices/UserServices.dart';

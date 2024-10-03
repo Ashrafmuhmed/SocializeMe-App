@@ -1,10 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:socializeme_app/Cubits/AddPostCubit/add_post_cubit.dart';
 import 'package:socializeme_app/models/userData.dart';
 import 'package:socializeme_app/screens/loginScreen.dart';
 import '../constants/constants.dart';
@@ -23,7 +21,6 @@ class _ProfilescreenState extends State<Profilescreen> {
   Map<String, dynamic>? currentUserData;
   Userdata? currentUser;
   bool isLoading = false;
-  late SharedPreferences _preferences;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +32,6 @@ class _ProfilescreenState extends State<Profilescreen> {
           IconButton(
               onPressed: () async {
                 SharedPreferences prefs = await SharedPreferences.getInstance();
-                _preferences = prefs;
                 prefs.setBool(login_check, false);
                 FirebaseAuth.instance.signOut();
                 Navigator.of(context).pop();
@@ -56,7 +52,9 @@ class _ProfilescreenState extends State<Profilescreen> {
                 currentUser = Userdata.json(
                     userData: snapshot.data!.data() as Map<String, dynamic>);
                 return ListView(
-                  children: [UserProfilePageHead(currentUser: currentUser!)],
+                  children: [UserProfilePageHead(currentUser: currentUser!),
+                  
+                  ]
                 );
               } else {
                 isLoading = true;

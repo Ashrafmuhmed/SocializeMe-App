@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:socializeme_app/screens/CurrentUserProfileScreen.dart';
+import 'package:socializeme_app/screens/PostsScreen.dart';
 import 'package:socializeme_app/screens/SearchPage.dart';
 
 class Mainscreen extends StatefulWidget {
@@ -11,10 +12,11 @@ class Mainscreen extends StatefulWidget {
 }
 
 class _MainscreenState extends State<Mainscreen> {
-  int _selectedIndex = 1;
+  int _selectedIndex = 0;
 
   // List of widgets to navigate between
   static List<Widget> _pages = <Widget>[
+    Postsscreen(),
     SearchPage(),
     Profilescreen(),
     Center(child: Text('More Page')),
@@ -31,7 +33,15 @@ class _MainscreenState extends State<Mainscreen> {
     return Scaffold(
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: Colors.amber,
+        unselectedItemColor: Colors.white,
         items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.list,
+            ),
+            label: 'Home',
+          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
             label: 'Search',
