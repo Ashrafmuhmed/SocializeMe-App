@@ -1,5 +1,6 @@
 class Userdata {
   final String email, uid, username, bio, imgLink;
+  List<String>? posts;
   Userdata(
       {required this.bio,
       required this.email,
@@ -11,7 +12,15 @@ class Userdata {
       email: userData['email'],
       username: userData['username'],
       uid: userData['uid'],
-      imgLink: userData['imgLink']);
-  Map<String, dynamic> toJson() =>
-      {'username': username, 'uid': uid, 'email': email, 'bio': bio, 'imgLink': imgLink};
+      imgLink: userData['imgLink']
+      );
+  Map<String, dynamic> toJson() => {
+        'username': username,
+        'uid': uid,
+        'email': email,
+        'bio': bio,
+        'imgLink': imgLink,
+        'useruID' : uid,
+        'postsIds': []
+      };
 }

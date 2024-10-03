@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -27,6 +28,7 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
           password: password,
         );
         await user.reauthenticateWithCredential(credential);
+        await FirebaseStorage.instance.ref(user.email).delete();
         await FirebaseFirestore.instance
             .collection(profiles)
             .doc(user.uid)

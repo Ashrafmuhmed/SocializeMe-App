@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socializeme_app/screens/AddPostScreen.dart';
 import 'package:socializeme_app/screens/DeleteAccountPage.dart';
 
 import '../../models/userData.dart';
@@ -83,7 +84,10 @@ class UserProfilePageHead extends StatelessWidget {
                           ),
                           CustomProfileButtonIcons(
                             icondata: Icons.add_circle_outline,
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => Addpostscreen( currentUser: currentUser,)));
+                            },
                           ),
                         ],
                       ),
@@ -98,7 +102,7 @@ class UserProfilePageHead extends StatelessWidget {
           child: Container(
             width: 100,
             height: 100,
-            decoration:  BoxDecoration(
+            decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
                     image: NetworkImage(currentUser.imgLink),

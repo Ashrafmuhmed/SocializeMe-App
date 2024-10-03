@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:socializeme_app/Cubits/AddPostCubit/add_post_cubit.dart';
 import 'package:socializeme_app/Cubits/LoginUserCubit/login_user_cubit.dart';
 import 'package:socializeme_app/Cubits/RegesterUserCubit/regester_user_cubit.dart';
 import 'Auth.dart';
@@ -18,6 +19,9 @@ void main() async {
       ),
       BlocProvider(
         create: (context) => LoginUserCubit(),
+      ),
+      BlocProvider(
+        create: (context) => AddPostCubit(),
       ),
     ],
     child: MaterialApp(
