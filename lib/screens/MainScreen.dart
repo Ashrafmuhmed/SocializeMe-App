@@ -54,6 +54,10 @@ class _MainscreenState extends State<Mainscreen> {
             icon: Icon(Icons.more_horiz),
             label: 'More',
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.chat),
+            label: 'Chats',
+          ),
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,

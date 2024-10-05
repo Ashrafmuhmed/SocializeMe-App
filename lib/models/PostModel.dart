@@ -20,4 +20,12 @@ class Postmodel {
       'userUid': userUid
     };
   }
+  factory Postmodel.json(Map<String, dynamic> json) {
+    return Postmodel(
+        title: json['title'],
+        description: json['description'],
+        time: json['time'],
+        imgLink: json['imgLink'],
+        userUid: json['userUid']);
+  }
 }
