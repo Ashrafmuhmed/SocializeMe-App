@@ -9,6 +9,8 @@ import 'package:socializeme_app/models/userData.dart';
 import '../widgets/SearchWidgets/UserTile.dart';
 
 class SearchPage extends StatefulWidget {
+    static final String id = 'searchPage';
+
   @override
   State<SearchPage> createState() => _SearchPageState();
 }

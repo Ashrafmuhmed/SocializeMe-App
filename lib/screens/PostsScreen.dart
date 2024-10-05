@@ -11,6 +11,7 @@ import 'package:socializeme_app/widgets/PostsWidgets/PostCard.dart';
 
 class Postsscreen extends StatefulWidget {
   const Postsscreen({super.key});
+  static final String id = 'postsscreen';
 
   @override
   State<Postsscreen> createState() => _PostsscreenState();

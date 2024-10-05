@@ -1,20 +1,25 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:socializeme_app/models/PostModel.dart';
+import 'package:socializeme_app/models/userData.dart';
 import 'package:socializeme_app/screens/MainScreen.dart';
 
 import '../../screens/CurrentUserProfileScreen.dart';
 import '../../screens/UserProfilePage.dart';
 class Profilepostcard extends StatelessWidget {
-  const Profilepostcard({
+   Profilepostcard({
     super.key,
-    required this.post,
+    required this.post, this.user,
   });
 
   final Postmodel post;
-
+  Userdata ? user;
   @override
   Widget build(BuildContext context) {
+    if(user != null)
+    {
+      post.user = user;
+    }
     return Card(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -23,12 +28,7 @@ class Profilepostcard extends StatelessWidget {
           children: [
             ListTile(
               onTap: () {
-                if(post.user!.uid == FirebaseAuth.instance.currentUser!.uid) 
-                {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=> Profilescreen()));
-                }
-                else
-                Navigator.of(context).push(MaterialPageRoute(builder: (context)=> Userprofilepage(user: post.user!)));
+                
               },
               leading: Container(
                 width: 50,

@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:socializeme_app/models/PostModel.dart';
 import 'package:socializeme_app/models/userData.dart';
-import 'package:socializeme_app/screens/MainScreen.dart';
 
 import '../../screens/CurrentUserProfileScreen.dart';
 import '../../screens/UserProfilePage.dart';

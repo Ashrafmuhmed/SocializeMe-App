@@ -4,18 +4,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socializeme_app/models/userData.dart';
 import 'package:socializeme_app/screens/loginScreen.dart';
-import '../Cubits/CurrentUserPostsCubit/cubit/current_user_posts_cubit.dart';
+import 'package:socializeme_app/widgets/PostsWidgets/ProfilePostCard.dart';
+import '../Cubits/CurrentUserPostsCubit/current_user_posts_cubit.dart';
 import '../constants/constants.dart';
 import '../models/PostModel.dart';
-import '../widgets/PostsWidgets/PostCard.dart';
 import '../widgets/ProfileWidgets/UserProfilePageHead.dart';
 
 class Profilescreen extends StatefulWidget {
   const Profilescreen({super.key});
+    static final String id = 'CurrentProifle';
 
   @override
   State<Profilescreen> createState() => _ProfilescreenState();
@@ -27,7 +27,6 @@ class _ProfilescreenState extends State<Profilescreen> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   Map<String, dynamic>? currentUserData;
   Userdata? currentUser;
-  bool isLoading = false;
   bool postLoading = true;
   bool noPosts = false;
   @override
@@ -79,86 +78,78 @@ class _ProfilescreenState extends State<Profilescreen> {
                 icon: const Icon(Icons.output_rounded))
           ],
         ),
-        body: ModalProgressHUD(
-          inAsyncCall: isLoading,
-          child: FutureBuilder<DocumentSnapshot>(
-              future: firestore.collection('profiles').doc(_cred!.uid).get(),
-              builder: (BuildContext context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done &&
-                    snapshot.hasData) {
-                  isLoading = false;
-                  setState(() {
-                    
-                  });
-                  currentUser = Userdata.json(
-                      userData: snapshot.data!.data() as Map<String, dynamic>);
-                  return CustomScrollView(slivers: [
-                    SliverToBoxAdapter(
-                        child: UserProfilePageHead(currentUser: currentUser!)),
-                    const SliverToBoxAdapter(
-                        child: Padding(
-                      padding: EdgeInsets.symmetric(
-                          vertical: 15.0, horizontal: 20.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Divider(
-                              color: Color.fromARGB(255, 133, 133, 133),
-                              thickness: 2,
-                              endIndent: 10,
-                            ),
+        body: FutureBuilder<DocumentSnapshot>(
+            future: firestore.collection('profiles').doc(_cred!.uid).get(),
+            builder: (BuildContext context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done ||
+                  snapshot.hasData) {
+                currentUser = Userdata.json(
+                    userData: snapshot.data!.data() as Map<String, dynamic>);
+                return CustomScrollView(slivers: [
+                  SliverToBoxAdapter(
+                      child: UserProfilePageHead(currentUser: currentUser!)),
+                  const SliverToBoxAdapter(
+                      child: Padding(
+                    padding: EdgeInsets.symmetric(
+                        vertical: 15.0, horizontal: 20.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Divider(
+                            color: Color.fromARGB(255, 133, 133, 133),
+                            thickness: 2,
+                            endIndent: 10,
                           ),
-                          Text(
-                            "Posts",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                        ),
+                        Text(
+                          "Posts",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.amber,
+                          ),
+                        ),
+                        Expanded(
+                          child: Divider(
+                            color: Color.fromARGB(255, 133, 133, 133),
+                            thickness: 2,
+                            indent: 10,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )),
+                  noPosts
+                      ? const SliverToBoxAdapter(
+                          child: Center(
+                          child: Text('No posts yet',
+                              style: TextStyle(fontSize: 20)),
+                        ))
+                      : !postLoading
+                          ? SliverList(
+                              delegate: SliverChildBuilderDelegate(
+                                (context, index) {
+                                  return Profilepostcard(
+                                    post: posts[index],
+                                    user: currentUser,
+                                  ); // Your PostCard widget
+                                },
+                                childCount: posts.length,
+                              ),
+                            )
+                          : const SliverToBoxAdapter(
+                              child: Center(
+                                  child: CircularProgressIndicator(
                               color: Colors.amber,
-                            ),
-                          ),
-                          Expanded(
-                            child: Divider(
-                              color: Color.fromARGB(255, 133, 133, 133),
-                              thickness: 2,
-                              indent: 10,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )),
-                    noPosts
-                        ? const SliverToBoxAdapter(
-                            child: Center(
-                            child: Text('No posts yet',
-                                style: TextStyle(fontSize: 20)),
-                          ))
-                        : !postLoading
-                            ? SliverList(
-                                delegate: SliverChildBuilderDelegate(
-                                  (context, index) {
-                                    return PostCard(
-                                      post: posts[index],
-                                      user: currentUser,
-                                    ); // Your PostCard widget
-                                  },
-                                  childCount: posts.length,
-                                ),
-                              )
-                            : const SliverToBoxAdapter(
-                                child: Center(
-                                    child: CircularProgressIndicator(
-                                color: Colors.amber,
-                              ))),
-                  ]);
-                } else {
-                  isLoading = true;
-                  return const Center(
-                      child: CircularProgressIndicator(
-                    color: Colors.amber,
-                  ));
-                }
-              }),
-        ),
+                            ))),
+                ]);
+              } else {
+                return const Center(
+                    child: CircularProgressIndicator(
+                  color: Colors.amber,
+                ));
+              }
+            }),
       ),
     );
   }

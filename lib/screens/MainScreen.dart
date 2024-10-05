@@ -5,6 +5,8 @@ import 'package:socializeme_app/screens/PostsScreen.dart';
 import 'package:socializeme_app/screens/SearchPage.dart';
 
 class Mainscreen extends StatefulWidget {
+    static final String id = 'MainScreen';
+
   const Mainscreen({super.key});
 
   @override
@@ -15,11 +17,11 @@ class _MainscreenState extends State<Mainscreen> {
   int _selectedIndex = 0;
 
   // List of widgets to navigate between
-  static List<Widget> _pages = <Widget>[
-    Postsscreen(),
+  static final List<Widget> _pages = <Widget>[
+    const Postsscreen(),
     SearchPage(),
-    Profilescreen(),
-    Center(child: Text('More Page')),
+    const Profilescreen(),
+    const Center(child: Text('More Page')),
   ];
 
   void _onItemTapped(int index) {

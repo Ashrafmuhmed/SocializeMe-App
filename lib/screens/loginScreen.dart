@@ -13,6 +13,8 @@ import 'signupScreen.dart';
 
 class Loginscreen extends StatefulWidget {
   const Loginscreen({super.key});
+    static final String id = 'LoginScreen';
+
 
   @override
   State<Loginscreen> createState() => _LoginscreenState();

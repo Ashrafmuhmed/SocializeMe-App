@@ -15,6 +15,7 @@ import 'loginScreen.dart';
 
 class Signupscreen extends StatefulWidget {
   const Signupscreen({super.key});
+  static final String id = 'SignUpPage';
 
   @override
   State<Signupscreen> createState() => _SignupscreenState();
@@ -81,10 +82,13 @@ class _SignupscreenState extends State<Signupscreen> {
             child: Form(
               autovalidateMode: autovalid,
               key: formkey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+              child: ListView(
                 children: [
-                  Flexible(flex: 2, child: Container()),
+                  Image.asset(
+                    'assets/pics/Asset 2.png',
+                    width: 150,
+                    height: 160,
+                  ),
                   Stack(
                     children: [
                       Container(
@@ -94,7 +98,9 @@ class _SignupscreenState extends State<Signupscreen> {
                             border: const Border(top: BorderSide()),
                             shape: BoxShape.circle,
                             image: DecorationImage(
-                                image: _image == null ? AssetImage('assets/pics/profile.png') : MemoryImage(_image!), 
+                                image: _image == null
+                                    ? AssetImage('assets/pics/profile.png')
+                                    : MemoryImage(_image!),
                                 fit: BoxFit.fitHeight)),
                       ),
                       Positioned(
@@ -170,8 +176,9 @@ class _SignupscreenState extends State<Signupscreen> {
                     height: 20,
                   ),
                   ElevatedButton(
-                      onPressed: () async{
-                        final Uint8List avatarImage = await imageToUnit8List('assets/pics/profile.png');
+                      onPressed: () async {
+                        final Uint8List avatarImage =
+                            await imageToUnit8List('assets/pics/profile.png');
                         if (formkey.currentState!.validate()) {
                           formkey.currentState!.save();
                           BlocProvider.of<RegesterUserCubit>(context)
@@ -180,7 +187,8 @@ class _SignupscreenState extends State<Signupscreen> {
                                   bio: _bioCont.text,
                                   email: _emailCont.text,
                                   password: _passCont.text,
-                                  imgSrc: _image == null ? avatarImage : _image!);
+                                  imgSrc:
+                                      _image == null ? avatarImage : _image!);
                         } else {
                           autovalid = AutovalidateMode.always;
                           setState(() {});
@@ -202,7 +210,6 @@ class _SignupscreenState extends State<Signupscreen> {
                       ),
                     ],
                   ),
-                  Flexible(flex: 2, child: Container()),
                 ],
               ),
             ),
@@ -225,8 +232,8 @@ void navigateLogin(BuildContext context) {
   Navigator.of(context)
       .push(MaterialPageRoute(builder: (context) => const Loginscreen()));
 }
+
 Future<Uint8List> imageToUnit8List(String path) async {
   ByteData byteData = await rootBundle.load(path);
   return byteData.buffer.asUint8List();
 }
-

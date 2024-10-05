@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,12 +11,12 @@ import 'package:socializeme_app/models/userData.dart';
 import 'package:socializeme_app/services/userServices/UserServices.dart';
 import 'package:socializeme_app/widgets/SnackBarWidget.dart';
 
+import '../Cubits/CurrentUserPostsCubit/current_user_posts_cubit.dart';
 import '../widgets/AddPostWidgets/AddPostForm.dart';
 
 class Addpostscreen extends StatefulWidget {
   const Addpostscreen({super.key, required this.currentUser});
   final Userdata currentUser;
-
   @override
   State<Addpostscreen> createState() => _AddpostscreenState();
 }
@@ -43,13 +44,14 @@ class _AddpostscreenState extends State<Addpostscreen> {
             isLoading = false;
           });
           Navigator.pop(context);
+          Snackbarwidget().ShowSnackbar(
+              context: context, message: 'Ur posted uploaded successfuly');
+          BlocProvider.of<CurrentUserPostsCubit>(context)
+              .getPosts(uid: FirebaseAuth.instance.currentUser!.uid);
         } else if (state is AddPostLoading) {
           setState(() {
             isLoading = true;
           });
-          Snackbarwidget().ShowSnackbar(
-              context: context, message: 'Ur posted uploaded successfuly');
-          
         } else if (state is AddPostFailed) {
           setState(() {
             isLoading = false;

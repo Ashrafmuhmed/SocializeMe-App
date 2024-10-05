@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:socializeme_app/models/PostModel.dart';
 import 'package:socializeme_app/models/userData.dart';
+import 'package:socializeme_app/widgets/PostsWidgets/ProfilePostCard.dart';
 import 'package:socializeme_app/widgets/ProfileWidgets/OtherUserProfilePageHead.dart';
 
-import '../Cubits/CurrentUserPostsCubit/cubit/current_user_posts_cubit.dart';
+import '../Cubits/CurrentUserPostsCubit/current_user_posts_cubit.dart';
 import '../widgets/PostsWidgets/PostCard.dart';
 
 class Userprofilepage extends StatefulWidget {
@@ -95,7 +96,7 @@ class _UserprofilepageState extends State<Userprofilepage> {
                     ? SliverList(
                         delegate: SliverChildBuilderDelegate(
                           (context, index) {
-                            return PostCard(
+                            return Profilepostcard(
                               post: posts[index],
                               user: widget.user,
                             ); // Your PostCard widget

@@ -10,6 +10,8 @@ import 'package:socializeme_app/widgets/SnackBarWidget.dart';
 import '../constants/constants.dart';
 
 class DeleteAccountPage extends StatefulWidget {
+    static final String id = 'DeletePage';
+
   @override
   _DeleteAccountPageState createState() => _DeleteAccountPageState();
 }
