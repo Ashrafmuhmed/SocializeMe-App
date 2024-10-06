@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:socializeme_app/screens/ChatListScreen.dart';
 import 'package:socializeme_app/screens/CurrentUserProfileScreen.dart';
 import 'package:socializeme_app/screens/PostsScreen.dart';
 import 'package:socializeme_app/screens/SearchPage.dart';
 
 class Mainscreen extends StatefulWidget {
-    static final String id = 'MainScreen';
+  static final String id = 'MainScreen';
 
   const Mainscreen({super.key});
 
@@ -21,7 +22,7 @@ class _MainscreenState extends State<Mainscreen> {
     const Postsscreen(),
     SearchPage(),
     const Profilescreen(),
-    const Center(child: Text('More Page')),
+    ChatListScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -51,10 +52,6 @@ class _MainscreenState extends State<Mainscreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.more_horiz),
-            label: 'More',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.chat),
