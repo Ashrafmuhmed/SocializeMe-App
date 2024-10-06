@@ -63,8 +63,19 @@ class _ChatListScreenState extends State<ChatListScreen> {
                     );
                   }
 
+/*
+required this.bio,
+      required this.email,
+      required this.username,
+      required this.uid,
+      required this.imgLink,
+      required this.postsIds});
+*/
+
+
                   Userdata otherUser = Userdata.json(
-                    userData: userSnapshot.data!.data() as Map<String, dynamic>,
+
+                    userData: userSnapshot.data!.data() != null ? userSnapshot.data!.data() as Map<String, dynamic> : {'bio': ' ' , 'email': ' ' , 'username': 'DeletedAccount' , 'uid': '' , 'imgLink': 'https://th.bing.com/th/id/OIP.RjCnIOWqbMJBeKLFizPm4QHaHa?w=220&h=220&c=7&r=0&o=5&pid=1.7' , 'postsIds': []},
                   );
 
                   return Card(
@@ -79,7 +90,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                       ),
                       subtitle:
                           Text(chatData['lastMessage'] ?? 'Tap to start chat'),
-                      onTap: () {
+                      onTap:   () {
                         // Navigate to chat screen with chatId and other user data
                         Navigator.push(
                           context,

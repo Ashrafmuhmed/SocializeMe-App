@@ -1,11 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:socializeme_app/models/PostModel.dart';
 import 'package:socializeme_app/models/userData.dart';
-import 'package:socializeme_app/screens/MainScreen.dart';
 
-import '../../screens/CurrentUserProfileScreen.dart';
-import '../../screens/UserProfilePage.dart';
 class Profilepostcard extends StatelessWidget {
    Profilepostcard({
     super.key,
@@ -13,7 +9,7 @@ class Profilepostcard extends StatelessWidget {
   });
 
   final Postmodel post;
-  Userdata ? user;
+  final Userdata ? user;
   @override
   Widget build(BuildContext context) {
     if(user != null)

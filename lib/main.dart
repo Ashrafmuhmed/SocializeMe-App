@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:socializeme_app/Cubits/AddPostCubit/add_post_cubit.dart';
-import 'package:socializeme_app/Cubits/ChatsProviderCubit/chats_procider_cubit.dart';
 import 'package:socializeme_app/Cubits/CurrentUserPostsCubit/current_user_posts_cubit.dart';
 import 'package:socializeme_app/Cubits/FetchAllPostsCubit/fetch_all_posts_cubit.dart';
 import 'package:socializeme_app/Cubits/LoginUserCubit/login_user_cubit.dart';
@@ -38,7 +37,7 @@ void main() async {
       routes: {},
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark(),
-      home: Auth(),
+      home: const Auth(),
     ),
   ));
 }

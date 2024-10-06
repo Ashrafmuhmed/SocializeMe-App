@@ -85,11 +85,6 @@ class ChatsProciderCubit extends Cubit<ChatsProciderState> {
         'user2Uid': user2Uid,
         'createdAt': FieldValue.serverTimestamp(),
       });
-      var messagesSubcollection = _firestore
-          .collection('chats')
-          .doc(chatId)
-          .collection('messages');
-
       // Emit the success state with the new ChatId
       emit(ChatsProciderFound(ChatId: chatId));
     } catch (e) {

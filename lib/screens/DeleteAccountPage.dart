@@ -31,6 +31,29 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
         );
         await user.reauthenticateWithCredential(credential);
         await FirebaseStorage.instance.ref(user.email).delete();
+
+        
+        
+        
+        
+        // deleting all user chats
+        QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('profiles').doc(user.uid).collection('UserChats').get();
+        for (QueryDocumentSnapshot doc in snapshot.docs) {
+            await doc.reference.delete();
+        }
+
+        //deleting all users posts
+        var userFields = await FirebaseFirestore.instance.collection('profiles').doc(user.uid);
+        for (var doc in (await userFields.get()).data()!['postsIds']) {
+          await FirebaseFirestore.instance
+              .collection('UserPosts')
+              .doc(doc)
+              .delete();
+        }
+        
+        
+        
+        
         await FirebaseFirestore.instance
             .collection(profiles)
             .doc(user.uid)
@@ -43,7 +66,7 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
           Navigator.pop(context);
           Navigator.pop(context);
           Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => Signupscreen()));
+              .push(MaterialPageRoute(builder: (context) => const Signupscreen()));
         });
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("User account deleted successfully")),
@@ -67,7 +90,7 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
 
   // Function to show the password input dialog
   void showPasswordDialog() {
-    final _passwordController = TextEditingController();
+    final passwordController = TextEditingController();
 
     showDialog(
       context: context,
@@ -75,7 +98,7 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
         return AlertDialog(
           title: const Text('Enter Password'),
           content: TextField(
-            controller: _passwordController,
+            controller: passwordController,
             obscureText: true,
             decoration: const InputDecoration(
               labelText: 'Password',
@@ -91,7 +114,7 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
             ),
             ElevatedButton(
               onPressed: () {
-                String password = _passwordController.text.trim();
+                String password = passwordController.text.trim();
                 if (password.isNotEmpty) {
                   Navigator.pop(context);
                   setState(() {

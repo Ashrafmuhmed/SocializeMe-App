@@ -13,7 +13,7 @@ class PostCard extends StatelessWidget {
   });
 
   final Postmodel post;
-  Userdata? user;
+  final Userdata? user;
   @override
   Widget build(BuildContext context) {
     if(user != null)

@@ -8,7 +8,6 @@ import 'package:socializeme_app/widgets/PostsWidgets/ProfilePostCard.dart';
 import 'package:socializeme_app/widgets/ProfileWidgets/OtherUserProfilePageHead.dart';
 
 import '../Cubits/CurrentUserPostsCubit/current_user_posts_cubit.dart';
-import '../widgets/PostsWidgets/PostCard.dart';
 
 class Userprofilepage extends StatefulWidget {
   Userprofilepage({super.key, required this.user});

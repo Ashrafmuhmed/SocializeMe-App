@@ -89,28 +89,30 @@ class _SignupscreenState extends State<Signupscreen> {
                     width: 150,
                     height: 160,
                   ),
-                  Stack(
-                    children: [
-                      Container(
-                        width: 100,
-                        height: 100,
-                        decoration: BoxDecoration(
-                            border: const Border(top: BorderSide()),
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                                image: _image == null
-                                    ? AssetImage('assets/pics/profile.png')
-                                    : MemoryImage(_image!),
-                                fit: BoxFit.fitHeight)),
-                      ),
-                      Positioned(
-                        top: 60,
-                        left: 60,
-                        child: IconButton(
-                            onPressed: _selectImage,
-                            icon: Icon(Icons.add_a_photo)),
-                      )
-                    ],
+                  Center(
+                    child: Stack(
+                      children: [
+                        Container(
+                          width: 100,
+                          height: 100,
+                          decoration: BoxDecoration(
+                              border: const Border(top: BorderSide()),
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                  image: _image == null
+                                      ? AssetImage('assets/pics/profile.png')
+                                      : MemoryImage(_image!),
+                                  fit: BoxFit.fitHeight)),
+                        ),
+                        Positioned(
+                          top: 60,
+                          left: 60,
+                          child: IconButton(
+                              onPressed: _selectImage,
+                              icon: Icon(Icons.add_a_photo)),
+                        )
+                      ],
+                    ),
                   ),
                   CustomTextField(
                     label: 'Name',
@@ -164,10 +166,10 @@ class _SignupscreenState extends State<Signupscreen> {
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'Field is required';
-                      } else if (!value.contains(RegExp(r'[A-Z]'))) {
-                        return 'Password must contain A , B ,... AND 1 , 2 , 3 , ......';
+                      } else if (!value.contains(RegExp(r'[A-Z]')) || !value.contains(RegExp(r'[a-z]'))) {
+                        return 'Password must be stronger , make a mix of A-Z , a-z and numbers';
                       } else if (!value.contains(RegExp(r'[0-9]'))) {
-                        return 'Password must contain A , B ,... AND 1 , 2 , 3 , ......';
+                        return 'Password must be stronger , make a mix of A-Z , a-z and numbers';
                       }
                       return null;
                     },

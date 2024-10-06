@@ -10,7 +10,7 @@ final class ChatsProciderSearching extends ChatsProciderState {}
 final class ChatsProciderCreating extends ChatsProciderState {}
 
 final class ChatsProciderFound extends ChatsProciderState {
-  String ChatId;
+  final String ChatId;
 
   ChatsProciderFound({required this.ChatId});
 }

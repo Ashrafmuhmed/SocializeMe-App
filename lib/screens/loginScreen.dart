@@ -13,8 +13,7 @@ import 'signupScreen.dart';
 
 class Loginscreen extends StatefulWidget {
   const Loginscreen({super.key});
-    static final String id = 'LoginScreen';
-
+  static final String id = 'LoginScreen';
 
   @override
   State<Loginscreen> createState() => _LoginscreenState();
@@ -35,8 +34,23 @@ class _LoginscreenState extends State<Loginscreen> {
             _isLoading = false;
           });
 
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(state.exception.message!)));
+          if (state.exception.code == 'user-not-found') {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('No user found for that email')),
+            );
+          } else if (state.exception.code == 'invalid-email') {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Invalid email')),
+            );
+          } else if (state.exception.code == 'network-request-failed') {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('No internet connection')),
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('No user found for that email')),
+            );
+          }
         } else if (state is LoginUserLoading) {
           setState(() {
             _isLoading = true;
@@ -77,6 +91,9 @@ class _LoginscreenState extends State<Loginscreen> {
                           validator: (value) {
                             if (value!.isEmpty) {
                               return 'Field is required';
+                            } else if (!value.contains('@') ||
+                                !value.contains('.')) {
+                              return 'please enter valid email';
                             }
                             return null;
                           },
@@ -108,6 +125,7 @@ class _LoginscreenState extends State<Loginscreen> {
                                         password: _passCont.text);
                               } else {
                                 autovalid = AutovalidateMode.always;
+                                setState(() {});
                               }
                             },
                             child: const Text('Login')),
@@ -132,18 +150,7 @@ class _LoginscreenState extends State<Loginscreen> {
                             const Text('forgot your password ? '),
                             GestureDetector(
                               onTap: () {
-                                if (_emailCont == '') {
-                                  Snackbarwidget().ShowSnackbar(
-                                      context: context,
-                                      message:
-                                          'Write your email in the field first');
-                                } else {
-                                  FirebaseAuth.instance.sendPasswordResetEmail(
-                                      email: _emailCont.text);
-                                  Snackbarwidget().ShowSnackbar(
-                                      context: context,
-                                      message: 'See your mail now !!');
-                                }
+                                showPasswordDialog();
                               },
                               child: const Text(
                                 'Reset my password',
@@ -166,5 +173,83 @@ class _LoginscreenState extends State<Loginscreen> {
     Navigator.of(context).pop();
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => const Signupscreen()));
+  }
+
+  void showPasswordDialog() {
+    final passwordController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Enter your email'),
+          content: CustomTextField(
+            controller: passwordController,
+            validator: (p0) {
+              return null;
+            },
+            label: 'Email',
+            secured: false,
+            inputType: TextInputType.emailAddress,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                String email = passwordController.text.trim();
+                if (email.isNotEmpty) {
+                  Future.delayed(const Duration(milliseconds: 300), () {
+                    Navigator.pop(context);
+                  });
+                  setState(() {
+                    passwordController.clear();
+                    _isLoading = true;
+                  });
+                  try {
+                    await FirebaseAuth.instance
+                        .sendPasswordResetEmail(email: email);
+                    setState(() {
+                      _isLoading = false;
+                    });
+                  } on FirebaseAuthException catch (e) {
+                    if (e.code == 'user-not-found') {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text('No user found for that email')),
+                      );
+                    } else if (e.code == 'invalid-email') {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Invalid email')),
+                      );
+                    } else if (e.code == 'network-request-failed') {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('No internet connection')),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('No user found for that email')),
+                      );
+                    }
+
+                    setState(() {
+                      _isLoading = false;
+                    });
+                  }
+                } else {
+                  Snackbarwidget().ShowSnackbar(
+                      context: context, message: 'Email field cant be empty');
+                }
+              },
+              child: const Text('Reset my password'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
