@@ -38,6 +38,7 @@ class FetchAllPostsCubit extends Cubit<FetchAllPostsState> {
           time: postData['time'],
           user: userData, userUid: postData['userUid'],
           imgLink: postData['imgLink'],
+          postId: postData['postId'],
         );
 
         posts.add(post);

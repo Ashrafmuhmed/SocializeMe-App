@@ -27,17 +27,18 @@ class AddPostCubit extends Cubit<AddPostState> {
       required String description,
       required Uint8List? file}) async {
     emit(AddPostLoading());
+
     Postmodel post = Postmodel(
         title: title,
         description: description,
         time: DateTime.now().toString().substring(0, 16),
         userUid: FirebaseAuth.instance.currentUser!.uid);
-
     try {
       DocumentReference docRef =
           await _firestore.collection('UserPosts').add(post.toJSON());
       String postid = docRef.id;
-
+      _firestore.collection('UserPosts').doc(postid).update({'postId': postid});
+      post.postId = postid;
       String? imgLink;
       if (file != null) {
         imgLink = await uploadImageToStorage(childName: postid, file: file);

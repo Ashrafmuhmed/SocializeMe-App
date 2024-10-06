@@ -98,6 +98,7 @@ class _UserprofilepageState extends State<Userprofilepage> {
                             return Profilepostcard(
                               post: posts[index],
                               user: widget.user,
+                              current: false,
                             ); // Your PostCard widget
                           },
                           childCount: posts.length,

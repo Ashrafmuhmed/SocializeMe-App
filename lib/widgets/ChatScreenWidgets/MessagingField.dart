@@ -47,9 +47,9 @@ class MessagingField extends StatelessWidget {
                     .doc(chatId)
                     .collection('messages')
                     .add({
-                  'senderId': FirebaseAuth.instance.currentUser!.uid,
+                  'senderId':  FirebaseAuth.instance.currentUser!.uid,
                   'message': text,
-                  'timestamp': DateTime.now().toString(),
+                  'timestamp':  FieldValue.serverTimestamp(),
                   'isRead': false
                 });
                 await _firestore
@@ -59,7 +59,7 @@ class MessagingField extends StatelessWidget {
                     .doc(chatId)
                     .update({
                   'lastMessage': text,
-                  'time': DateTime.now().toString()
+                  'time': FieldValue.serverTimestamp()
                 });
 
                 // Add to user2's UserChats subcollection
@@ -70,7 +70,7 @@ class MessagingField extends StatelessWidget {
                     .doc(chatId)
                     .update({
                   'lastMessage': text,
-                  'time': DateTime.now().toString()
+                  'time': FieldValue.serverTimestamp()
                 });
               }
             },

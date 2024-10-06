@@ -10,7 +10,7 @@ import 'package:socializeme_app/widgets/SnackBarWidget.dart';
 import '../constants/constants.dart';
 
 class DeleteAccountPage extends StatefulWidget {
-    static final String id = 'DeletePage';
+  static final String id = 'DeletePage';
 
   @override
   _DeleteAccountPageState createState() => _DeleteAccountPageState();
@@ -32,41 +32,37 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
         await user.reauthenticateWithCredential(credential);
         await FirebaseStorage.instance.ref(user.email).delete();
 
-        
-        
-        
-        
         // deleting all user chats
-        QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('profiles').doc(user.uid).collection('UserChats').get();
+        QuerySnapshot snapshot = await FirebaseFirestore.instance
+            .collection('profiles')
+            .doc(user.uid)
+            .collection('UserChats')
+            .get();
         for (QueryDocumentSnapshot doc in snapshot.docs) {
-            await doc.reference.delete();
+          await doc.reference.delete();
         }
 
-        //deleting all users posts
-        var userFields = await FirebaseFirestore.instance.collection('profiles').doc(user.uid);
+        //deleting all users posts + photos
+        var userFields = await FirebaseFirestore.instance
+            .collection('profiles')
+            .doc(user.uid);
         for (var doc in (await userFields.get()).data()!['postsIds']) {
-          await FirebaseFirestore.instance
-              .collection('UserPosts')
-              .doc(doc)
-              .delete();
+          await DeletePost(doc);
         }
-        
-        
-        
-        
+
         await FirebaseFirestore.instance
             .collection(profiles)
             .doc(user.uid)
             .delete();
         await user.delete();
-        setState(() async {
-          isLoading = false;
           SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setBool('isLoggedIn', false);
+        setState(() async {
+          isLoading = false;
           Navigator.pop(context);
           Navigator.pop(context);
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => const Signupscreen()));
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const Signupscreen()));
         });
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("User account deleted successfully")),
@@ -86,6 +82,11 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
         );
       }
     }
+  }
+
+  Future<void> DeletePost(doc) async {
+    await FirebaseStorage.instance.ref(doc).delete();
+    await FirebaseFirestore.instance.collection('UserPosts').doc(doc).delete();
   }
 
   // Function to show the password input dialog

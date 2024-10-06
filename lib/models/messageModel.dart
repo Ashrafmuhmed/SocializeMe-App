@@ -1,7 +1,9 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Messagemodel {
   final String content, senderId;
-  final String time;
+  final Timestamp  time;
   bool isRead;
   Messagemodel(
       {required this.content,
@@ -13,7 +15,7 @@ class Messagemodel {
     isRead: json['isRead'] ?? false, // Use a default value for isRead if missing
     content: json['message'] ?? '',  // Default to an empty string if message is missing
     senderId: json['senderId'] ?? '', // Provide a default value if senderId is missing
-    time: json['timestamp'],  // The processed timestamp value
+    time: json['timestamp'] ?? Timestamp.now(),  // The processed timestamp value
   );
   }
 }

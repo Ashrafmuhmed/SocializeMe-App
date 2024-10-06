@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:socializeme_app/screens/AddPostScreen.dart';
 import 'package:socializeme_app/screens/DeleteAccountPage.dart';
+import 'package:socializeme_app/screens/EditProfileScreen.dart';
 
 import '../../models/userData.dart';
 import 'CustomProfileButtonIcons.dart';
@@ -80,13 +81,22 @@ class UserProfilePageHead extends StatelessWidget {
                           ),
                           CustomProfileButtonIcons(
                             icondata: Icons.edit,
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) => Editprofilescreen(
+                                          currentUser: currentUser,
+                                        )),
+                              );
+                            },
                           ),
                           CustomProfileButtonIcons(
                             icondata: Icons.add_circle_outline,
                             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => Addpostscreen( currentUser: currentUser,)));
+                                  builder: (context) => Addpostscreen(
+                                        currentUser: currentUser,
+                                      )));
                             },
                           ),
                         ],

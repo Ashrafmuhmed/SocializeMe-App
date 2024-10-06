@@ -32,6 +32,7 @@ class CurrentUserPostsCubit extends Cubit<CurrentUserPostsState> {
           time: postFetched['time'],
           imgLink: postFetched['imgLink'],
           userUid: postFetched['userUid'],
+          postId: postFetched['postId'],
         );
 
         log('Post fetched: ${post}');
