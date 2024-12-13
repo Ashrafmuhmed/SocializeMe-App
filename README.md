@@ -1,17 +1,6 @@
-# socializeme_app
+![smartmockups_m1y3hej9](https://github.com/user-attachments/assets/79624ef6-8e2e-428a-9ed8-c7326d0515a0)
+SocializeMe, a social media app developed using Flutter, Dart, and Firebase. This app connects users in a seamless and engaging way. It features secure authentication through FirebaseAuth, allowing users to create and manage posts while viewing content from others on a dedicated posts screen.
 
-A new Flutter project.
+Users can easily search for profiles, navigate to their own profile page to manage and delete their posts, and engage in real-time chats with fellow users. The app also integrates Gmail for email communications, making it easy to connect.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-# SocializeMe-App
+For backend support, I utilized Firebase Cloud Firestore for user data storage and Firebase Storage for images. State management is handled by Bloc, and I incorporated features like the Image Picker, Shared Preferences, Modal Progress HUD, and URL Launcher for added functionality.
