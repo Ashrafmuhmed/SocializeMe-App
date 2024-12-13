@@ -26,7 +26,7 @@ class _UserprofilepageState extends State<Userprofilepage> {
 
   bool postLoading = true;
   bool noPosts = false;
-    List<Postmodel> posts = [];
+  List<Postmodel> posts = [];
   @override
   Widget build(BuildContext context) {
     return BlocListener<CurrentUserPostsCubit, CurrentUserPostsState>(
@@ -54,6 +54,11 @@ class _UserprofilepageState extends State<Userprofilepage> {
       child: Scaffold(
         body: CustomScrollView(
           slivers: [
+            const SliverToBoxAdapter(
+              child: SizedBox(
+                height: 10,
+              ),
+            ),
             SliverToBoxAdapter(
                 child: Otheruserprofilepagehead(currentUser: widget.user)),
             const SliverToBoxAdapter(

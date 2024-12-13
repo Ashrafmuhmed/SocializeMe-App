@@ -57,13 +57,13 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
         await user.delete();
           SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setBool('isLoggedIn', false);
-        setState(() async {
+        setState(()  {
           isLoading = false;
+        });
           Navigator.pop(context);
           Navigator.pop(context);
           Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => const Signupscreen()));
-        });
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("User account deleted successfully")),
         );
